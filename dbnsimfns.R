@@ -277,4 +277,19 @@ orderdag<-function(adj) {
   else stop("not a DAG")
 
 }
+dbndata2dbnr<-function(dt,slices) {
+  nvar<-ncol(dt)/slices
+  dtnew<-matrix(ncol=nvar)
+
+  for(i in 1:nrow(dt)) {
+    newlinelong<-dt[i,]
+    for(j in 1:slices) {
+      newline<-newlinelong[1:nvar+nvar*(j-1)]
+      dtnew<-rbind(dtnew,newline)
+    }
+  }
+  dtnew<-dtnew[-1,]
+  rownames(dtnew)<-1:nrow(dtnew)
+  return(as.data.frame(dtnew))
+}
 

@@ -1,3 +1,5 @@
+#Cross validation function for the breast cancer dataset
+
 DBNCVcore<-function(dbndata,i,groupvector,bl=NULL,pm=NULL,supervised=TRUE,p=0.5,levels=c("responder","nonresponder"),
                     nruns=1,slices=2){
 
@@ -47,10 +49,6 @@ DBNCVcore<-function(dbndata,i,groupvector,bl=NULL,pm=NULL,supervised=TRUE,p=0.5,
       res$prederror[2,]<-DBNCVpar2(modelMAP[[membi[2]]],DBNconsmat=modelCons[[membi[2]]],parlocal[[membi[2]]],Di)
       res$lls[1]<-scoreClassMAP[membi[1]]
       res$lls[2]<-scoreClassMAP[membi[2]]
-
-      #DBNCVpar(modelMAP[[membi[1]]],DBNconsmat=NULL,datalocal[[membi[1]]],Di,slices = 2, b = 0)
-      #DBNCVpar(modelMAP[[membi[2]]],DBNconsmat=modelCons[[membi[2]]],datalocal[[membi[2]]],Di,slices = 2, b = 0)
-
 
       for(k in 1:K) {
       parlocal[[k]] <- scoreparameters("bge", datalocal[[k]], dbnpar = list(samestruct = FALSE, slices = 2, b = 0),

@@ -1,3 +1,5 @@
+#Cross validation for the colon cancer dataset
+
 DBNCV_MAE<-function(i,dbndata,metadata,bl,pm,pl1,levels=c("normal","cancer")){
 
   K<-length(unique(levels))
