@@ -2,7 +2,7 @@ Simulated data:
 
 - script dbnsimfns.R contains functions needed for generating a random DBN structure, parameters and data
 - script DBNCVparopt.R contains functions needed for computing MAE
-- script simulations3.R includes the function needed for one simulation replicate DBNsimulation() and the code for parallelization of 50 replicates
+- script DBNsimulation.R includes the function needed for one simulation replicate DBNsimulation() and the code for parallelization of 50 replicates
 - the results of simulation can be found in the file “DBNsimres/DBNsimres_4slices_30samples_100n.rds” 
 
 GSE5462, breast cancer dataset:

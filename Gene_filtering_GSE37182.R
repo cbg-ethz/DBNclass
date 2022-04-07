@@ -3,31 +3,48 @@
 library(limma)
 library(OmnipathR)
 
-#get TF-targets interactions list
+##get TF-targets interactions list from the Omnipath database
 intTF <- import_dorothea_interactions(
   resources=c("DoRothEA"),
   dorothea_levels = c('A'),
   organism=org
 )
 
+#first construct the design matrix
+colon_group<-colon_metadata$group
+colon_group<-colon_metadata$time
+
+cond<-factor(colon_group)
+#set t=0 as a reference
+cond <- relevel(cond, ref="T0")
+design.trt=model.matrix(~cond)
+colnames(design.trt)
 
 #code for DGE analysys of previously normalized data
-#needs to be performed for resonders vs non-responders and
-#for pre-treatment vs post-treatment
-corfit <- duplicateCorrelation(colon_rma, design.trt,ndups=1)
+corfit <- duplicateCorrelation(colon_normalized, design.trt,ndups=1)
 fit_colon <- lmFit(colon_rma, design.trt, cor = corfit$consensus.correlation)
 efit_colon<-eBayes(fit_colon)
-de_colon <- topTable(efit_colon, coef = "condpost",n=22283)
-de_colon<-de_colon[which(de_colon[,"adj.P.Val"]<0.05),]
 
+#get differentially expressed genes at t=1
+de_colon_T1c <- topTable(efit_colon, coef = "condT1",n=10000)
+length(which(de_colon_T1c[,"adj.P.Val"]<0.1)) #0
 
-#get gene names
-#de_colon_symbol
+#get differentially expressed genes at t=2
+de_colon_T2c <- topTable(efit_colon, coef = "condT2",n=10000)
+length(which(de_colon_T2c[,"adj.P.Val"]<pval)) #1
+head(de_colon_T2)
+de_colon<-union(de_colon,de_colon_T2c$ID[which(de_colon_T2c$adj.P.Val<pval)])
 
-colon_DE_genes_symbol<-unique(colon_DE_response_symbol,colon_DE_time_symbol)
+#get differentially expressed genes at t=3
+de_colon_T3c <- topTable(efit_colon, coef = "condT3",n=10000)
+length(which(de_colon_T3c[,"adj.P.Val"]<pval)) #17
+de_colon_T3c$ID[which(de_colon_T3c$adj.P.Val<pval)]
+
+#get the union
+de_colon<-union(de_colon,de_colon_T3c$ID[which(de_colon_T3c$adj.P.Val<pval)])
 
 #extend the list with TF
-respTF<-unique(intTF$source_genesymbol[which(intTF$target_genesymbol%in%colon_DE_genes_symbol)])
+respTF<-unique(intTF$source_genesymbol[which(intTF$target_genesymbol%in%de_colon)])
 
 #final set of genes
-GSE37182_genes<-unique(c(respTF,colon_DE_genes_symbol))
+GSE37182_genes<-unique(c(respTF,de_colon))

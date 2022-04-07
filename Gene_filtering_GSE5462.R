@@ -3,7 +3,7 @@
 library(limma)
 library(OmnipathR)
 
-#get TF-targets interactions list
+#get TF-targets interactions list from the Omnipath database
 intTF <- import_dorothea_interactions(
   resources=c("DoRothEA"),
   dorothea_levels = c('A'),
