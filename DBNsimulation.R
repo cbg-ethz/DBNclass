@@ -16,9 +16,9 @@ path<-"DBNsimres/"
 ##########################################
 
 #this function creates a DBN with n nodes in one time slice, 4 time slices and nsamp replicates
-#rep replicate number
-#n number of nodes in one time slice
-#nsmal number of samples
+#rep - simulation replicate number
+#n - number of nodes in one time slice
+#nsmal - number of replicates (rowa) in the dataset
 DBNsimulation<-function(rep,n,nsamp=100) {
   library(pcalg)
   library(BiDAG)
@@ -26,14 +26,14 @@ DBNsimulation<-function(rep,n,nsamp=100) {
   library(dbnR)
   library(bnstruct)
 
-  source("dbnsimfns.R")
-  source("DBNCVparopt.R")
+  source("/Users/polinasuter/Downloads/DBNs/DBNclass/dbnsimfns.R")
+  source("/Users/polinasuter/Downloads/DBNs/DBNclass/DBNCVparopt.R")
 
   #define path to save individual results
   path<-"DBNsimres/"
 
 
-  set.seed(rep+100)
+  set.seed(rep+100, kind = "Mersenne-Twister", sample.kind = 'Rounding', normal.kind = "Inversion")
 
   #simulate transition structure
   simDBN<-genDBN(1.3,n,2,lB=0.4,uB=1.1)
@@ -136,8 +136,8 @@ DBNsimulation<-function(rep,n,nsamp=100) {
 
   starttime<-Sys.time()
   dbnfit<-iterativeMCMC(dbnscore,accum=TRUE,alpha=0.2,plus1it=6,hardlim=10,cpdag=FALSE, alphainit=0.01, scoreout=TRUE)#,addspace=hcfitcons5[[1]])
+  dbnsamp<-orderMCMC(dbnscore,scoretable = getSpace(dbnfit),MAP=FALSE,chainout=TRUE)
   endtime<-Sys.time()
-  dbnsamp<-orderMCMC(dbnscore,startspace = dbnfit$endspace,MAP=FALSE,chainout=TRUE)
   runtime<-endtime-starttime
 
   mcmcep<-edgep(dbnsamp)
@@ -159,16 +159,17 @@ DBNsimulation<-function(rep,n,nsamp=100) {
   res<-rbind(mcmcres,hcres,dbnrres,bnstructres)
   rownames(res)<-c(1:nrow(res))
 
-  if(!is.null(path)) {
-    saveRDS(res,paste(path,"MAR22dbnsimn",nsamp,n,rep,".rds",sep=""))
-  }
+  #if(!is.null(path)) {
+  #  saveRDS(res,paste(path,"MAR22dbnsimn",nsamp,n,rep,".rds",sep=""))
+  #}
   return(res)
 }
+
 
 #this code can be used to run 50 replicates of simulations in parallel
 library(parallel)
 rep<-c(1:50)
-cl <- makeCluster(52)
+cl <- makeCluster(51)
 outputClApply <- parallel::clusterApply(cl, rep, DBNsimulation,
                                         n=n,nsamp=nsamp)
 stopCluster(cl)
