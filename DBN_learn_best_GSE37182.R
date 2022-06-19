@@ -22,14 +22,16 @@ library(BiDAG)
 pars_ns_normal<-scoreparameters("bge",datanorm,
                          dbnpar=list(samestruct=FALSE, slices=4,b=0,datalist=TRUE,stationary=FALSE),
                          DBN=TRUE,edgepmat=NULL)
-sampn_ns_normal<-orderMCMC(pars_ns_normal, startspace=commonspace,chainout=TRUE,
+#obtain a sample from the posterior distribution
+sampn_ns_normal<-orderMCMC(pars_ns_normal, startspace=commonspace,chainout=TRUE,MAP=FALSE,
                       verbose=TRUE,blacklist=curbl)
 consn_ns_normal<-modelp(sampn_ns_normal,p=0.9,pdag=FALSE)
 
 pars_ns_cancer<-scoreparameters("bge",datacancer,
                          dbnpar=list(samestruct=FALSE, slices=4,b=0,datalist=TRUE,stationary=FALSE),
                          DBN=TRUE,edgepmat=NULL)
-sampn_ns_cancer <-orderMCMC(pars_ns_cancer, startspace=commonspace,chainout = TRUE,
+#obtain a sample from the posterior distribution
+sampn_ns_cancer <-orderMCMC(pars_ns_cancer, startspace=commonspace,chainout = TRUE,MAP=FALSE,
                      verbose=TRUE,blacklist=curbl)
 consn_ns_cancer<-modelp(sampn_ns_cancer,p=0.9,pdag=FALSE)
 
