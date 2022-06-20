@@ -27,7 +27,7 @@ scoreall<-scoreparameters("bge", dbndata, dbnpar = list(samestruct = FALSE, slic
 #find MAP dag
 fitall <- iterativeMCMC(scoreall, verbose = TRUE, blacklist=curbl,hardlimit=9,plus1it=7)
 #obtain a sample from the posterior distribution
-sampall <- orderMCMC(scoreall, verbose = FALSE, startspace=fitall$endspace, MAP=FALSE,
+sampall <- orderMCMC(scoreall, verbose = FALSE, startspace=fitall$endspace,
                      chainout = TRUE, blacklist=curbl)
 #estimate consensus model by performing model averaging
 consall<-modelp(sampall,p=p,pdag=FALSE)
