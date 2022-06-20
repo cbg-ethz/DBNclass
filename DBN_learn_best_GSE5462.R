@@ -16,7 +16,7 @@
 dbndata<-readRDS("data/data_125.rds")
 
 #STRING based blacklisting
-curbl<-readRDS("/Users/polinasuter/Downloads/DBNs/DBNclass/data/bl_125.rds")
+curbl<-readRDS("data/bl_125.rds")
 #threshold for consensus model
 p<-0.9
 
@@ -33,11 +33,11 @@ sampall <- orderMCMC(scoreall, verbose = FALSE, startspace=fitall$endspace,chain
 breast_net<-modelp(sampall,p=p,pdag=FALSE)
 
 #for visualization
-cellcycle_genes<-readRDS("/Users/polinasuter/Downloads/DBNs/DBNclass/visual/cell_cycle_genes.rds")
+cellcycle_genes<-readRDS("visual/cell_cycle_genes.rds")
 cellcycle_genes_plot<-c(cellcycle_genes,paste(cellcycle_genes,".",sep=""))
-response_genes<-readRDS("/Users/polinasuter/Downloads/DBNs/DBNclass/visual/response_genes.rds")
+response_genes<-readRDS("visual/response_genes.rds")
 response_genes_plot<-c(response_genes,paste(response_genes,".",sep=""))
-data_125_map<-readRDS("/Users/polinasuter/Downloads/DBNs/DBNclass/visual/gene125symbols.rds")
+data_125_map<-readRDS("visual/gene125symbols.rds")
 
 colnames(breast_net)<-rownames(breast_net)<-data_125_map
 genes_subset<-unique(c(cellcycle_genes,response_genes,
@@ -45,7 +45,7 @@ genes_subset<-unique(c(cellcycle_genes,response_genes,
                        paste(response_genes,".2",sep="")))
 breast_subnet<-breast_net[genes_subset,genes_subset]
 
-source("/Users/polinasuter/Downloads/DBNs/DBNclass/visual/plothelp.R")
+source("visual/plothelp.R")
 
 plotGSE5462(breast_subnet,"trans",highlight1 = cellcycle_genes_plot,
            highlight2 = c(response_genes_plot),ts=28)
