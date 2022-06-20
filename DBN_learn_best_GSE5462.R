@@ -37,18 +37,21 @@ cellcycle_genes<-readRDS("visual/cell_cycle_genes.rds")
 cellcycle_genes_plot<-c(cellcycle_genes,paste(cellcycle_genes,".",sep=""))
 response_genes<-readRDS("visual/response_genes.rds")
 response_genes_plot<-c(response_genes,paste(response_genes,".",sep=""))
+
+#union of cell cycle and response genes
+union_genes<-readRDS("visual/union_genes.rds")
+#mapping afy <-> gene symbols
 data_125_map<-readRDS("visual/gene125symbols.rds")
 
 colnames(breast_net)<-rownames(breast_net)<-data_125_map
-genes_subset<-unique(c(cellcycle_genes,response_genes,
-                       paste(cellcycle_genes,".2",sep=""),
-                       paste(response_genes,".2",sep="")))
+genes_subset<-unique(c(union_genes,
+                       paste(union_genes,".2",sep="")))
 breast_subnet<-breast_net[genes_subset,genes_subset]
 
 source("visual/plothelp.R")
 
 plotGSE5462(breast_subnet,"trans",highlight1 = cellcycle_genes_plot,
-           highlight2 = c(response_genes_plot),ts=28)
+           highlight2 = response_genes_plot,ts=28)
 
 
 
