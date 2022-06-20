@@ -9,12 +9,12 @@
 
 
 #search space for sampling identified using iterativeMCMC for both groups
-commonspace<-readRDS("/Users/polinasuter/Downloads/DBNs/DBNclass/data/comcolon122.rds")
+commonspace<-readRDS("data/comcolon122.rds")
 #data for the dataset data for the dataset GSE37182: differentially expressed genes and their transcription factors
-datanorm<-readRDS("/Users/polinasuter/Downloads/DBNs/DBNclass/data/datanorm122.rds")
-datacancer<-readRDS("/Users/polinasuter/Downloads/DBNs/DBNclass/data/datacancer122.rds")
+datanorm<-readRDS("data/datanorm122.rds")
+datacancer<-readRDS("data/datacancer122.rds")
 #curbl - blacklist prohibiting intra-edges
-curbl<-readRDS("/Users/polinasuter/Downloads/DBNs/DBNclass/data/bl_122i.rds")
+curbl<-readRDS("data/bl_122i.rds")
 #threshold for consensus model
 p<-0.9
 
